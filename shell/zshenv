@@ -1,1 +1,21 @@
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+
+# Claude Code auth for SSH sessions on a Mac.
+#
+# Claude Code's normal login lives in the macOS Keychain, which only a desktop
+# session can read. A shell entered over SSH can't, so Claude Code reports
+# "not logged in". A token from `claude setup-token` lives in a file instead.
+#
+# Only over SSH, because this token can make model requests but can't start
+# Remote Control sessions or reach claude.ai connectors. A desktop session keeps
+# the full login.
+#
+# Here rather than in .zshrc because .zshenv is the only file zsh reads for a
+# non-interactive `ssh host 'claude -p ...'`.
+#
+# Make the token with `claude setup-token`, then save it, readable only by you:
+#   (umask 077; mkdir -p ~/.config/claude; printf %s '<token>' > ~/.config/claude/oauth-token)
+# Tokens last a year and expire with no warning from Claude Code.
+if [[ -n $SSH_CONNECTION && -r ~/.config/claude/oauth-token ]]; then
+  export CLAUDE_CODE_OAUTH_TOKEN="$(<~/.config/claude/oauth-token)"
+fi

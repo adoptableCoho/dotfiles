@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 # Set up a new Mac or Ubuntu machine from this repo: tools, languages, the
-# config links from install.sh, the ~/projects layout and your repos.
+# config links from install.sh, and your repos via clone-repos.sh.
 # Run it as your normal user, not root; Homebrew refuses root.
 # Safe to re-run: each step skips what is already there.
 set -euo pipefail
 
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-projects="$HOME/projects"
 os="$(uname -s)"
 
 step() { printf '\n==> %s\n' "$*"; }
@@ -41,6 +40,15 @@ case "$os" in
 esac
 
 step "Homebrew"
+# Homebrew belongs to the account that installed it. On a shared machine, such
+# as a CI box with a non-admin build account, every install from another account
+# fails. So stop here, before anything in this account's home is changed.
+brew_prefix="$(dirname "$(dirname "$brew_bin")")"
+if [ -x "$brew_bin" ] && [ ! -w "$brew_prefix/Cellar" ]; then
+  echo "Homebrew at $brew_prefix belongs to $(stat -f %Su "$brew_prefix" 2>/dev/null || stat -c %U "$brew_prefix") and $(id -un) can't write to it." >&2
+  echo "Run this from that account, or not on this machine. Nothing has been changed." >&2
+  exit 1
+fi
 if [ ! -x "$brew_bin" ]; then
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
@@ -105,38 +113,9 @@ if [ "$os" = Linux ]; then
   fi
 fi
 
-step "Folders and repos"
-mkdir -p "$projects/src/active" "$projects/src/archive" "$projects/src/external"
-
-# Your own repos are looked up on GitHub rather than listed in this repo, so
-# their names stay private. Archived repos and forks are left out.
-# Live repos from both accounts go in src/active, except second-brain, which
-# goes at the top of ~/projects. This repo and the throwaway test fixtures
-# are skipped.
-own_repos() {
-  gh repo list coho-dev --limit 500 --no-archived --source --json name,url \
-    --jq '.[] | "src/active/\(.name) \(.url).git"'
-  gh repo list adoptableCoho --limit 500 --no-archived --source --json name,url \
-    --jq '.[] | select(.name != "dotfiles" and (.name | startswith("fixture-") | not))
-                | "\(if .name == "second-brain" then "" else "src/active/" end)\(.name) \(.url).git"'
-}
-
-failed=()
-while read -r dir url; do
-  case "$dir" in ''|'#'*) continue ;; esac
-  if [ -e "$projects/$dir" ]; then
-    echo "exists: $dir"
-  elif git clone "$url" "$projects/$dir"; then
-    echo "cloned: $dir"
-  else
-    failed+=("$dir")
-  fi
-done < <(own_repos; cat "$repo/repos.txt")
-
-if [ ${#failed[@]} -gt 0 ]; then
-  printf '\nThese repos did not clone:\n'
-  printf '  %s\n' "${failed[@]}"
-fi
+step "Repos"
+# A failed clone is listed and doesn't stop the rest of the setup.
+"$repo/clone-repos.sh" || true
 
 cat <<'EOF'
 
