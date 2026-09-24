@@ -1,0 +1,20 @@
+# Secrets and anything specific to one machine go in ~/.zshrc.local, which is
+# never tracked. It is sourced at the end so it can override anything here.
+
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="agnoster"
+plugins=(git)
+
+# OpenSpec writes its completions here; oh-my-zsh runs compinit below.
+fpath=("$ZSH/custom/completions" $fpath)
+
+source "$ZSH/oh-my-zsh.sh"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+
+export PATH="$HOME/.local/bin:$HOME/go/bin:$PATH"
+export DEV_FLOW_HOME="$HOME/projects/src/active/dev-flow/core"
+
+[ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"

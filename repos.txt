@@ -1,0 +1,18 @@
+# Other people's public repos that bootstrap.sh clones on a new machine.
+# Your own repos are looked up on GitHub instead; see bootstrap.sh.
+# Each line: <folder under ~/projects> <clone URL>
+# A folder that already exists is left alone.
+
+src/active/skills                     https://github.com/mattpocock/skills
+
+src/external/attention-span           https://github.com/alexgreensh/attention-span.git
+src/external/claude-hud               https://github.com/jarrodwatts/claude-hud.git
+src/external/humanlayer-skills        https://github.com/humanlayer/skills
+src/external/humanlayer               https://github.com/humanlayer/humanlayer.git
+src/external/mattpocock-sandcastle    https://github.com/mattpocock/sandcastle.git
+src/external/mattpocock-skills        https://github.com/mattpocock/skills.git
+src/external/OpenSpec                 https://github.com/Fission-AI/OpenSpec.git
+src/external/resume-tailoring-skill   https://github.com/varunr89/resume-tailoring-skill.git
+src/external/supacode                 https://github.com/supabitapp/supacode
+src/external/superpowers              https://github.com/obra/superpowers.git
+src/external/ui-ux-pro-max-skill      https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git
