@@ -1,3 +1,14 @@
+# PATH for every zsh, including a non-interactive `ssh host 'herdr ...'`, which
+# reads this file and no other. .zprofile sets Homebrew's again for login
+# shells, since on a Mac /etc/zprofile reorders PATH after this runs.
+for brew_bin in /opt/homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew; do
+  [ -x "$brew_bin" ] && eval "$("$brew_bin" shellenv)" && break
+done
+unset brew_bin
+export PATH="$HOME/.local/bin:$HOME/go/bin:$PATH"
+# Drop the repeats that leaves. Last, because a later `export PATH=` clears it.
+typeset -U path
+
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
 # Claude Code auth for SSH sessions on a Mac.
