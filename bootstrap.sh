@@ -108,7 +108,11 @@ if [ "$os" = Linux ]; then
     curl -fsSL https://get.docker.com | sudo sh
     sudo usermod -aG docker "$(id -un)"
   fi
-  if ! command -v tailscale >/dev/null 2>&1; then
+  # Under WSL, Tailscale runs on Windows and WSL shares its network, so a copy
+  # in here would only fight it over routes and DNS.
+  if grep -qi microsoft /proc/version; then
+    echo "WSL: skipping Tailscale, which belongs on the Windows side"
+  elif ! command -v tailscale >/dev/null 2>&1; then
     curl -fsSL https://tailscale.com/install.sh | sh
   fi
 fi

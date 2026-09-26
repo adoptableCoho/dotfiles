@@ -17,7 +17,8 @@ git clone https://github.com/adoptableCoho/dotfiles.git ~/projects/dotfiles
 on a Mac, a few apt packages on Ubuntu. Then it installs Homebrew, runs
 `install.sh` to link the config files, and asks you to log in to GitHub. After
 that it installs oh-my-zsh, Rust, uv, Node and everything in `Brewfile`. On
-Ubuntu it also installs Docker and Tailscale and makes zsh your shell. Last, it
+Ubuntu it also installs Docker and Tailscale and makes zsh your shell. Under
+WSL it skips Tailscale, which runs on the Windows side instead. Last, it
 creates `~/projects/src/{active,archive,external}` and clones your repos.
 Re-running it is safe: each step skips what is already there.
 
