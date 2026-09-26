@@ -103,16 +103,18 @@ brew bundle --file="$repo/Brewfile"
 
 # On a Mac these come from the Brewfile as apps.
 if [ "$os" = Linux ]; then
-  step "Docker and Tailscale"
+  # Under WSL, Tailscale runs on Windows and WSL shares its network, so a copy
+  # in here would only fight it over routes and DNS.
+  if grep -qi microsoft /proc/version; then
+    step "Docker (WSL: Tailscale belongs on the Windows side)"
+  else
+    step "Docker and Tailscale"
+  fi
   if ! command -v docker >/dev/null 2>&1; then
     curl -fsSL https://get.docker.com | sudo sh
     sudo usermod -aG docker "$(id -un)"
   fi
-  # Under WSL, Tailscale runs on Windows and WSL shares its network, so a copy
-  # in here would only fight it over routes and DNS.
-  if grep -qi microsoft /proc/version; then
-    echo "WSL: skipping Tailscale, which belongs on the Windows side"
-  elif ! command -v tailscale >/dev/null 2>&1; then
+  if ! grep -qi microsoft /proc/version && ! command -v tailscale >/dev/null 2>&1; then
     curl -fsSL https://tailscale.com/install.sh | sh
   fi
 fi
