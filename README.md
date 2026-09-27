@@ -53,10 +53,11 @@ you want back, add a line to `repos.txt`.
 read-only into every sandbox, so the host file is the single source of truth for
 host and sandbox alike.
 
-`~/.claude/statusline.sh` draws Claude Code's status line. It shows the git
-branch, whether you are in a worktree, whether there are uncommitted changes,
-how much of the context is used, and how far along the 5-hour and weekly limits
-are. It needs `jq` and `git`.
+`~/.claude/statusline.sh` draws Claude Code's status line. It shows the model
+and its reasoning effort, the git branch, whether you are in a worktree, whether
+there are uncommitted changes (in bold, so they stand out), how much of the
+context is used, and how far along the 5-hour and weekly limits are. It needs
+`jq` and `git`.
 
 Two rules this layout exists to hold:
 
