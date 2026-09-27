@@ -85,6 +85,13 @@ if [ ! -x "$HOME/.local/bin/uv" ]; then
   curl -LsSf https://astral.sh/uv/install.sh | env INSTALLER_NO_MODIFY_PATH=1 sh
 fi
 export PATH="$HOME/.local/bin:$PATH"
+uv self update || echo "uv self update failed; carrying on with $(uv --version)"
+
+step "Python (uv)"
+# The newest stable Python, as python and python3 in ~/.local/bin, which comes
+# before the system's on PATH. A re-run moves it to the newest patch release.
+# --default is still experimental in uv; the preview flag says we know.
+uv python install --default --upgrade --preview-features python-install-default
 
 step "Node (nvm)"
 export NVM_DIR="$HOME/.nvm"
