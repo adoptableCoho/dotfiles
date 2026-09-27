@@ -27,5 +27,21 @@ link "$repo/git/gitconfig" "$HOME/.gitconfig"
 
 mkdir -p "$dest"
 link "$repo/claude/CLAUDE.md" "$dest/CLAUDE.md"
+link "$repo/claude/statusline.sh" "$dest/statusline.sh"
+
+# settings.json is per-machine, so set only the status line entry and keep the
+# rest of the file as it is.
+python3 - "$dest/settings.json" <<'EOF'
+import json, os, sys
+path = sys.argv[1]
+settings = json.load(open(path)) if os.path.exists(path) else {}
+want = {"type": "command", "command": "~/.claude/statusline.sh"}
+if settings.get("statusLine") != want:
+    settings["statusLine"] = want
+    with open(path, "w") as f:
+        json.dump(settings, f, indent=2)
+        f.write("\n")
+    print(f"set: status line in {path}")
+EOF
 
 echo "Done. Open a new terminal and restart Claude Code to pick it up."

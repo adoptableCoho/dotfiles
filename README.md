@@ -47,10 +47,16 @@ you want back, add a line to `repos.txt`.
 | `shell/zshenv` | `~/.zshenv` |
 | `git/gitconfig` | `~/.gitconfig` |
 | `claude/CLAUDE.md` | `~/.claude/CLAUDE.md` |
+| `claude/statusline.sh` | `~/.claude/statusline.sh` |
 
 `~/.claude/CLAUDE.md` is the global Claude preferences file. `sbx` shares it
 read-only into every sandbox, so the host file is the single source of truth for
 host and sandbox alike.
+
+`~/.claude/statusline.sh` draws Claude Code's status line. It shows the git
+branch, whether you are in a worktree, whether there are uncommitted changes,
+how much of the context is used, and how far along the 5-hour and weekly limits
+are. It needs `jq` and `git`.
 
 Two rules this layout exists to hold:
 
@@ -67,8 +73,9 @@ Two rules this layout exists to hold:
   this.** Keep the mounts pointed at subfolders.
 
 `install.sh` makes every link in the table above. `bootstrap.sh` runs it for
-you; run it on its own when only the links need redoing. It leaves
-`~/.claude/settings.json` alone, since that file is per-machine. Re-running it
+you; run it on its own when only the links need redoing. `~/.claude/settings.json`
+is per-machine, so it isn't linked. `install.sh` changes only its `statusLine`
+entry, to point at the script above, and leaves everything else. Re-running it
 is safe: a real file already at a target path is moved to
 `<name>.bak-<timestamp>` rather than overwritten.
 
