@@ -97,7 +97,7 @@ step "Python (uv)"
 # --default is still experimental in uv; the preview flag says we know.
 uv python install --default --upgrade --preview-features python-install-default
 
-step "Node (nvm)"
+step "Node (nvm) and npm packages"
 export NVM_DIR="$HOME/.nvm"
 if [ ! -s "$NVM_DIR/nvm.sh" ]; then
   curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | PROFILE=/dev/null bash
@@ -108,6 +108,13 @@ set +u
 . "$NVM_DIR/nvm.sh"
 nvm install --lts
 set -u
+# Installed here, not in the Brewfile: brew bundle runs npm without nvm's
+# folder on the PATH, so nvm's npm can't find node, and brew bundle still
+# reports success. Installed if missing, never upgraded, like the Brewfile.
+npm_packages=(@openai/codex corepack)
+for package in "${npm_packages[@]}"; do
+  npm ls --global --depth=0 "$package" >/dev/null 2>&1 || npm install --global "$package"
+done
 
 step "Brewfile"
 brew bundle --file="$repo/Brewfile"

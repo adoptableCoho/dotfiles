@@ -39,8 +39,7 @@ go "golang.org/x/tools/cmd/goimports"
 go "golang.org/x/tools/gopls"
 cargo "create-tauri-app"
 uv "graphifyy"
-npm "@openai/codex"
-npm "corepack"
+# npm packages are in bootstrap.sh: brew bundle runs npm without nvm's Node.
 
 # Mac only. On Ubuntu, bootstrap.sh installs Docker and Tailscale from their
 # own install scripts, and the iOS tools have no use.
