@@ -55,9 +55,10 @@ host and sandbox alike.
 
 `~/.claude/statusline.sh` draws Claude Code's status line. It shows the model
 and its reasoning effort, the git branch, whether you are in a worktree, whether
-there are uncommitted changes (in bold, so they stand out), how much of the
-context is used, and how far along the 5-hour and weekly limits are. It needs
-`jq` and `git`.
+there are uncommitted changes, how much of the context is used, and how far
+along the 5-hour and weekly limits are. Labels are gray so the data stands out.
+Each percentage is green under 50%, yellow up to 80%, and red above that.
+Uncommitted changes show in bold yellow. It needs `jq` and `git`.
 
 Two rules this layout exists to hold:
 
