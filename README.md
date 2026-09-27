@@ -21,7 +21,11 @@ everything in `Brewfile`. On Ubuntu it also installs Docker and Tailscale and
 makes zsh your shell. Under WSL it skips Tailscale, which runs on the Windows
 side instead. Last, it creates `~/projects/src/{active,archive,external}` and
 clones your repos.
-Re-running it is safe: each step skips what is already there.
+Re-running it is safe: each step skips what is already there. It installs what
+is missing and upgrades nothing, so it can run on han, whose Homebrew the CI
+runners share; upgrading is a separate `brew upgrade`. On a Mac reached only
+over SSH, like han, the Brewfile swaps the Tailscale app and Docker Desktop for
+colima, since both apps need someone at the screen.
 
 Your own repos are looked up on GitHub at that point, so their names never
 appear in this repo. Every live repo in the `coho-dev` organization and in

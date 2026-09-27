@@ -53,6 +53,10 @@ if [ ! -x "$brew_bin" ]; then
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 eval "$("$brew_bin" shellenv)"
+# Install what's missing and upgrade nothing, here or as a side effect of an
+# install. On han the CI runners build with this same Homebrew, so an upgrade
+# would change what CI builds with. Upgrading is a separate `brew upgrade`.
+export HOMEBREW_BUNDLE_NO_UPGRADE=1 HOMEBREW_NO_INSTALL_UPGRADE=1 HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
 
 # Linked before anything is cloned or built, so git already has the gh
 # credential helper when the GitHub login and the clones need it.
