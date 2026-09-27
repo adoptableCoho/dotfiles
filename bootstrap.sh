@@ -108,6 +108,10 @@ set +u
 . "$NVM_DIR/nvm.sh"
 nvm install --lts
 set -u
+# nvm leaves its folder where it already was on the PATH, and a login shell
+# has it there already, behind the Homebrew folder shellenv just put first.
+# Homebrew's node and npm would then win, and install into Homebrew's folder.
+export PATH="$NVM_BIN:$PATH"
 # Installed here, not in the Brewfile: brew bundle runs npm without nvm's
 # folder on the PATH, so nvm's npm can't find node, and brew bundle still
 # reports success. Installed if missing, never upgraded, like the Brewfile.
