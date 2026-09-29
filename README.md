@@ -53,6 +53,12 @@ you want back, add a line to `repos.txt`.
 | `git/gitconfig` | `~/.gitconfig` |
 | `claude/CLAUDE.md` | `~/.claude/CLAUDE.md` |
 | `claude/statusline.sh` | `~/.claude/statusline.sh` |
+| `herdr/config.toml` | `~/.config/herdr/config.toml` |
+| `ghostty/config` (Mac only) | `~/Library/Application Support/com.mitchellh.ghostty/config` |
+
+herdr's Claude Code and Codex hooks aren't in the table. herdr owns those
+scripts and rewrites them on every update, so `bootstrap.sh` runs
+`herdr integration install` for each agent instead of linking copies.
 
 `~/.claude/CLAUDE.md` is the global Claude preferences file. `sbx` shares it
 read-only into every sandbox, so the host file is the single source of truth for

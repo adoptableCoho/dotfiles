@@ -1,0 +1,34 @@
+# Ghostty config. Options: https://ghostty.org/docs/config
+# Reload with Cmd+Shift+comma.
+
+font-family = "JetBrains Mono"
+font-size = 13
+
+# Hand these Cmd keys to herdr instead of Ghostty's own tabs and splits.
+# Cmd+W and Cmd+N stay with Ghostty: closing the window only detaches from
+# herdr, and the agents keep running.
+keybind = cmd+t=unbind
+keybind = cmd+d=unbind
+keybind = cmd+shift+d=unbind
+
+# Cmd+1..9 switch herdr tabs. Ghostty binds both the character and the
+# physical key, so both are overridden. Each sends the key with the Cmd
+# modifier in the form herdr reads (ESC [ <code> ; 9 u).
+keybind = cmd+1=text:\x1b[49;9u
+keybind = cmd+digit_1=text:\x1b[49;9u
+keybind = cmd+2=text:\x1b[50;9u
+keybind = cmd+digit_2=text:\x1b[50;9u
+keybind = cmd+3=text:\x1b[51;9u
+keybind = cmd+digit_3=text:\x1b[51;9u
+keybind = cmd+4=text:\x1b[52;9u
+keybind = cmd+digit_4=text:\x1b[52;9u
+keybind = cmd+5=text:\x1b[53;9u
+keybind = cmd+digit_5=text:\x1b[53;9u
+keybind = cmd+6=text:\x1b[54;9u
+keybind = cmd+digit_6=text:\x1b[54;9u
+keybind = cmd+7=text:\x1b[55;9u
+keybind = cmd+digit_7=text:\x1b[55;9u
+keybind = cmd+8=text:\x1b[56;9u
+keybind = cmd+digit_8=text:\x1b[56;9u
+keybind = cmd+9=text:\x1b[57;9u
+keybind = cmd+digit_9=text:\x1b[57;9u

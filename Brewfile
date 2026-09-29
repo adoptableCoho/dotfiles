@@ -48,6 +48,7 @@ if OS.mac?
   brew "swiftlint"
   brew "xcbeautify"
   cask "font-jetbrains-mono-nerd-font"
+  cask "ghostty"
   # A Mac you only reach over SSH, like han, runs Tailscale as a background
   # service so it stays on the tailnet with nobody logged in. The Tailscale app
   # would take it off, and Docker Desktop runs only for whoever is at the

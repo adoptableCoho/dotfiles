@@ -25,6 +25,16 @@ link "$repo/shell/zprofile" "$HOME/.zprofile"
 link "$repo/shell/zshenv" "$HOME/.zshenv"
 link "$repo/git/gitconfig" "$HOME/.gitconfig"
 
+mkdir -p "$HOME/.config/herdr"
+link "$repo/herdr/config.toml" "$HOME/.config/herdr/config.toml"
+
+# The Ghostty config binds Cmd keys, so it's Mac only.
+if [ "$(uname -s)" = Darwin ]; then
+  ghostty_dir="$HOME/Library/Application Support/com.mitchellh.ghostty"
+  mkdir -p "$ghostty_dir"
+  link "$repo/ghostty/config" "$ghostty_dir/config"
+fi
+
 mkdir -p "$dest"
 link "$repo/claude/CLAUDE.md" "$dest/CLAUDE.md"
 link "$repo/claude/statusline.sh" "$dest/statusline.sh"

@@ -1,0 +1,14 @@
+# herdr config. Full reference: herdr --default-config
+onboarding = false
+
+[keys]
+# Each action keeps its prefix key (Ctrl+B, then the key) as a fallback,
+# and adds the Cmd key Ghostty now passes through.
+new_tab = ["prefix+c", "cmd+t"]
+switch_tab = ["prefix+1..9", "cmd+1..9"]
+split_vertical = ["prefix+v", "cmd+d"]
+split_horizontal = ["prefix+minus", "cmd+shift+d"]
+
+[ui.toast]
+# Ask Ghostty to show a macOS notification when an agent finishes or needs you.
+delivery = "terminal"

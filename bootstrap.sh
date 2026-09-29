@@ -123,6 +123,15 @@ done
 step "Brewfile"
 brew bundle --file="$repo/Brewfile"
 
+step "herdr's Claude Code and Codex hooks"
+# herdr writes and updates each hook script and the agent's config entry for it
+# itself, so none of them are kept in this repo.
+for agent in claude codex; do
+  if ! herdr integration status | grep -q "^$agent: current"; then
+    herdr integration install "$agent"
+  fi
+done
+
 # On a Mac these come from the Brewfile as apps.
 if [ "$os" = Linux ]; then
   # Under WSL, Tailscale runs on Windows and WSL shares its network, so a copy
