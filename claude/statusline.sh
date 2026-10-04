@@ -1,6 +1,7 @@
 #!/bin/bash
 # Claude Code status line: model and effort, git branch, worktree,
-# uncommitted changes, context used, and the 5-hour and weekly limits.
+# uncommitted changes, context used, and the 5-hour and weekly limits,
+# with the time left until the 5-hour window resets.
 # Labels are gray and data is bright; percentages go green, yellow, then red.
 input=$(cat)
 
@@ -28,6 +29,13 @@ used=$(jq -r '
   | if $c.context_window_size then "\($used | k) of \($c.context_window_size | k)" else empty end' <<<"$input")
 ctx_pct=$(jq -r '.context_window.used_percentage // 0 | floor' <<<"$input")
 five=$(jq -r '.rate_limits.five_hour.used_percentage // empty | floor' <<<"$input")
+# Time until the 5-hour window resets, like "2h 14m". resets_at is Unix seconds.
+five_left=$(jq -r '
+  .rate_limits.five_hour.resets_at // empty
+  | (. - now | floor) as $s
+  | if $s <= 0 then empty
+    elif $s >= 3600 then "\($s / 3600 | floor)h \($s % 3600 / 60 | floor)m"
+    else "\($s / 60 | floor)m" end' <<<"$input" 2>/dev/null)
 week=$(jq -r '.rate_limits.seven_day.used_percentage // empty | floor' <<<"$input")
 
 parts=()
@@ -52,7 +60,7 @@ if branch=$(git -C "$dir" --no-optional-locks branch --show-current 2>/dev/null)
 fi
 
 parts+=("$(label context) ${used:+$used }$(pct "$ctx_pct")")
-[ -n "$five" ] && parts+=("$(label '5-hour limit') $(pct "$five")")
+[ -n "$five" ] && parts+=("$(label '5-hour limit') $(pct "$five")${five_left:+ $(label 'resets in') $five_left}")
 [ -n "$week" ] && parts+=("$(label 'weekly limit') $(pct "$week")")
 
 line=${parts[0]}
