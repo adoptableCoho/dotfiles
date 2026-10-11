@@ -1,7 +1,8 @@
 #!/bin/bash
-# Claude Code status line: model and effort, git branch, worktree,
-# uncommitted changes, context used, and the 5-hour and weekly limits,
-# with the time left until the 5-hour window resets.
+# Claude Code status line, in two rows. The first row shows model and effort,
+# git branch, worktree, and uncommitted changes. The second row shows context
+# used and the 5-hour and weekly limits, with the time left until the 5-hour
+# window resets.
 # Labels are gray and data is bright; percentages go green, yellow, then red.
 input=$(cat)
 
@@ -59,10 +60,18 @@ if branch=$(git -C "$dir" --no-optional-locks branch --show-current 2>/dev/null)
   parts+=("$branch")
 fi
 
-parts+=("$(label context) ${used:+$used }$(pct "$ctx_pct")")
-[ -n "$five" ] && parts+=("$(label '5-hour limit') $(pct "$five")${five_left:+ $(label 'resets in') $five_left}")
-[ -n "$week" ] && parts+=("$(label 'weekly limit') $(pct "$week")")
+usage=("$(label context) ${used:+$used }$(pct "$ctx_pct")")
+[ -n "$five" ] && usage+=("$(label '5-hour limit') $(pct "$five")${five_left:+ $(label 'resets in') $five_left}")
+[ -n "$week" ] && usage+=("$(label 'weekly limit') $(pct "$week")")
 
-line=${parts[0]}
-for part in "${parts[@]:1}"; do line+=" ${gray}·${reset} $part"; done
-printf '%s' "$line"
+# Joins its arguments with a gray dot between them.
+join() {
+  local line=$1 part
+  shift
+  for part in "$@"; do line+=" ${gray}·${reset} $part"; done
+  printf '%s' "$line"
+}
+
+# Second row: context and limits. The first row is skipped if it has nothing to show.
+[ ${#parts[@]} -gt 0 ] && printf '%s\n' "$(join "${parts[@]}")"
+join "${usage[@]}"

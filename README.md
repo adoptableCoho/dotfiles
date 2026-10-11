@@ -64,11 +64,12 @@ scripts and rewrites them on every update, so `bootstrap.sh` runs
 read-only into every sandbox, so the host file is the single source of truth for
 host and sandbox alike.
 
-`~/.claude/statusline.sh` draws Claude Code's status line. It shows the model
-and its reasoning effort, the git branch, whether you are in a worktree, whether
-there are uncommitted changes, how much of the context is used, and how far
-along the 5-hour and weekly limits are, plus how long until the 5-hour window
-resets. Labels are gray so the data stands out.
+`~/.claude/statusline.sh` draws Claude Code's status line in two rows. The first
+row shows the model and its reasoning effort, the git branch, whether you are in
+a worktree, and whether there are uncommitted changes. The second row shows how
+much of the context is used and how far along the 5-hour and weekly limits are,
+plus how long until the 5-hour window resets. Labels are gray so the data stands
+out.
 Each percentage is green under 50%, yellow up to 80%, and red above that.
 Uncommitted changes show in bold yellow. It needs `jq` and `git`.
 
