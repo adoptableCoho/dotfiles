@@ -23,7 +23,9 @@ case "$os" in
   Linux)
     brew_bin=/home/linuxbrew/.linuxbrew/bin/brew
     step "apt packages"
-    apt_packages=(build-essential procps curl file git zsh)
+    # libnspr4, libnss3 and libasound2t64 are what Playwright's Chromium needs
+    # to start, for headless screenshots.
+    apt_packages=(build-essential procps curl file git zsh libnspr4 libnss3 libasound2t64)
     sudo apt-get update
     # Ubuntu's mirrors sometimes list a package before they serve it, which
     # fails with a 404. A second try after a fresh update usually gets it.
