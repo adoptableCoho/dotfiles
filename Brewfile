@@ -17,6 +17,8 @@ brew "golangci-lint"
 brew "goreleaser"
 brew "jq"
 brew "lazygit"
+# For dev-flow's linters, which bootstrap.sh installs with this Node's npm.
+brew "node"
 brew "pnpm"
 brew "promptfoo"
 brew "ripgrep"
