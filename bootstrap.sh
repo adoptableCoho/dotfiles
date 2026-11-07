@@ -117,17 +117,38 @@ export PATH="$NVM_BIN:$PATH"
 # Installed here, not in the Brewfile: brew bundle runs npm without nvm's
 # folder on the PATH, so nvm's npm can't find node, and brew bundle still
 # reports success. Installed if missing, never upgraded, like the Brewfile.
-# oxlint and prettier are dev-flow's quality gate's, which fails without them,
-# pinned to the versions its CI installs (coho-dev/dev-flow's
-# .github/actions/linters/action.yml). A machine with another version gets the
-# pinned one.
-npm_packages=(@openai/codex corepack oxlint@1.77.0 prettier@3.9.6)
+npm_packages=(@openai/codex corepack)
 for package in "${npm_packages[@]}"; do
   npm ls --global --depth=0 "$package" >/dev/null 2>&1 || npm install --global "$package"
 done
 
 step "Brewfile"
 brew bundle --file="$repo/Brewfile"
+
+step "dev-flow's linters"
+# dev-flow's quality gate fails without oxlint and prettier. They're pinned to
+# the versions its CI installs (coho-dev/dev-flow's
+# .github/actions/linters/action.yml), and a machine with another version gets
+# the pinned one.
+#
+# They're installed with Homebrew's npm, not nvm's. When `nvm install --lts`
+# above moves to a new Node, packages installed under nvm stay behind with the
+# old one. A shell opened before the move keeps the old Node on its PATH, so it
+# has no linters. Homebrew's folder is on every shell's PATH whichever Node it
+# has, including a non-interactive `ssh host '...'`, which never loads nvm.
+# han's runners install the same two the same way.
+linters=(oxlint@1.77.0 prettier@3.9.6)
+for package in "${linters[@]}"; do
+  "$brew_prefix/bin/npm" ls --global --depth=0 "$package" >/dev/null 2>&1 \
+    || "$brew_prefix/bin/npm" install --global "$package"
+done
+# An older bootstrap installed them under nvm's Node. nvm's folder comes first
+# on the PATH, so a copy there would hide the pinned one once the pins move.
+for package in oxlint prettier; do
+  if npm ls --global --depth=0 "$package" >/dev/null 2>&1; then
+    npm uninstall --global "$package"
+  fi
+done
 
 step "herdr's Claude Code and Codex hooks"
 # herdr writes and updates each hook script and the agent's config entry for it
