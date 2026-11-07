@@ -117,7 +117,11 @@ export PATH="$NVM_BIN:$PATH"
 # Installed here, not in the Brewfile: brew bundle runs npm without nvm's
 # folder on the PATH, so nvm's npm can't find node, and brew bundle still
 # reports success. Installed if missing, never upgraded, like the Brewfile.
-npm_packages=(@openai/codex corepack)
+# oxlint and prettier are dev-flow's quality gate's, which fails without them,
+# pinned to the versions its CI installs (coho-dev/dev-flow's
+# .github/actions/linters/action.yml). A machine with another version gets the
+# pinned one.
+npm_packages=(@openai/codex corepack oxlint@1.77.0 prettier@3.9.6)
 for package in "${npm_packages[@]}"; do
   npm ls --global --depth=0 "$package" >/dev/null 2>&1 || npm install --global "$package"
 done
