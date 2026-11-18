@@ -3,6 +3,8 @@
 
 brew "actionlint"
 brew "cmark-gfm"
+# dev-flow's quality gate drives a terminal with it.
+brew "expect"
 brew "fd"
 brew "ffind"
 brew "ffmpeg"
