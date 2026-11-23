@@ -85,6 +85,8 @@ if [ ! -x "$HOME/.cargo/bin/rustup" ]; then
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
 fi
 export PATH="$HOME/.cargo/bin:$PATH"
+# rust-analyzer reads the standard library's source from rust-src.
+rustup component add rust-src
 
 step "uv"
 if [ ! -x "$HOME/.local/bin/uv" ]; then
