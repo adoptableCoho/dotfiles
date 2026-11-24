@@ -11,6 +11,14 @@ typeset -U path
 
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
+# Claude Code runs its commands in bash, not zsh. zsh reads `=word` as a
+# program lookup and fails on a glob that matches nothing, and agents'
+# commands keep tripping on both. After PATH, so `command -v` sees it all.
+export CLAUDE_CODE_SHELL="$(command -v bash)"
+# And each of its commands starts in the project folder, so an earlier `cd`
+# can't leave a later command running in the wrong one.
+export CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR=1
+
 # Claude Code auth for SSH sessions on a Mac.
 #
 # Claude Code's normal login lives in the macOS Keychain, which only a desktop
