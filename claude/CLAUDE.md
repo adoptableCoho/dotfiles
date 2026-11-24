@@ -8,6 +8,7 @@ When I'm the reader (chat, the questions you ask me, commits, tickets, PRs, docs
 
 ## Tools
 - In Bash, `rg` and `fd`, never `grep` and `find`.
+- Always give `rg` a path, such as `rg pattern .`. With none, it reads standard input and hangs.
 - Don't pipe a command whose exit code matters into `tail`. Redirect, then check `$?`.
 
 ## Saving research
