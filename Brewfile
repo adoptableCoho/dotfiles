@@ -42,6 +42,8 @@ go "golang.org/x/tools/cmd/callgraph"
 go "golang.org/x/tools/cmd/goimports"
 go "golang.org/x/tools/gopls"
 cargo "create-tauri-app"
+# Reviews snapshot test changes one at a time, as jig's coding standards ask.
+cargo "cargo-insta"
 uv "graphifyy"
 # npm packages are in bootstrap.sh: brew bundle runs npm without nvm's Node.
 
